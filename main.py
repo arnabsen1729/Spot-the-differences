@@ -1,3 +1,4 @@
+#!/bin/python3
 from PIL import Image
 import cv2
 from matplotlib import pyplot as plt
@@ -51,7 +52,7 @@ def finalDetect(IMG1, IMG2, res):
     gray = cv2.cvtColor(dst, cv2.COLOR_BGR2GRAY)
     blurred = cv2.GaussianBlur(gray, (11, 11), 0)
     
-    thresh = cv2.threshold(blurred, 80, 255, cv2.THRESH_BINARY)[1]
+    thresh = cv2.threshold(blurred, 105, 255, cv2.THRESH_BINARY)[1]
     thresh = cv2.erode(thresh, None, iterations=2)
     thresh = cv2.dilate(thresh, None, iterations=4)
     labels = measure.label(thresh, connectivity=2, background=0)
@@ -82,6 +83,7 @@ def finalDetect(IMG1, IMG2, res):
         cv2.circle(orgImage2, (int(cX), int(cY)), int(radius), (0, 0, 255), 3)
         cv2.circle(orgImage1, (int(cX), int(cY)), int(radius), (0, 0, 255), 3)
         cv2.putText(orgImage2, "#{}".format(i + 1), (x, y - 15), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
+        cv2.putText(orgImage1, "#{}".format(i + 1), (x, y - 15), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 255), 2)
 
     invertImg1 = cv2.cvtColor(orgImage1, cv2.COLOR_BGR2RGB)
     invertImg2 = cv2.cvtColor(orgImage2, cv2.COLOR_BGR2RGB)
@@ -91,6 +93,12 @@ def finalDetect(IMG1, IMG2, res):
 
 
 if __name__ == "__main__":
-    IMG1 = input('Enter path to image 1: ')
-    IMG2 = input('Enter path to image 2: ')
+    my_parser = argparse.ArgumentParser(description='The script will spot the differences between two images, circle and number them. ')
+    my_parser.add_argument('--img1', action='store', type=str, required=True, help='the path to image 1')
+    my_parser.add_argument('--img2', action='store', type=str, required=True, help='the path to image 2')
+    # IMG1 = input('Enter path to image 1: ')
+    # IMG2 = input('Enter path to image 2: ')
+    args = my_parser.parse_args()
+    IMG1 = args.img1 
+    IMG2 = args.img2
     main(IMG1, IMG2)

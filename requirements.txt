@@ -1,0 +1,5 @@
+PilPillow 
+opencv-python==4.2.0.34
+matplotlib
+imutils==0.5.3
+numpy==1.18.5
